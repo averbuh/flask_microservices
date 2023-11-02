@@ -10,5 +10,4 @@ pipeline {
               }
           }
       }
-      name 'micro_flask'
   }
