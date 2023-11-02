@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  main:
+    build:
+      context: ./app-main
+      dockerfile: Dockerfile
+    ports:
+      - "80:5000"
+    networks:
+        - flaskapp
+
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 1m30s 
+      timeout: 10s 
+      retries: 3
+      start_period: 40s
+
+  auth:
+    build:
+      context: ./app-auth
+      dockerfile: Dockerfile
+    ports:
+      - 81:5000
+    networks:
+        - flaskapp
+#        - database
+#    depends_on:
+#      - db_mysql 
+#    
+#  db_mysql:
+#    image: mysql:latest
+#    environment:
+#      MYSQL_ROOT_PASSWORD: zxc
+#    networks:
+#        - database
+#    volumes:
+#        - mysql-data
+#
+#volumes:
+#  mysql-data:
+#    external: true
+  
+networks:
+  flaskapp:
+    driver: bridge
+    
