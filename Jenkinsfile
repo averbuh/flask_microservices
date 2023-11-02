@@ -1,13 +1,14 @@
 pipeline {
-    agent any
-    options {
-      timeout(time: 1, unit: 'SECONDS')
+  agent any
+  stages {
+    stage('Test') {
+      steps {
+        echo 'Hello master pipeline'
       }
-    stages {
-        stage('Test') {
-            steps {
-                echo 'Hello master pipeline'
-              }
-          }
-      }
+    }
+
   }
+  options {
+    timeout(time: 1, unit: 'SECONDS')
+  }
+}
