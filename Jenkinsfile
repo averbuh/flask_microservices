@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                echo 'Hello dev pipeline'
+                echo 'Hello master pipeline'
               }
           }
       }
