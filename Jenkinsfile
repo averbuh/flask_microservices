@@ -7,8 +7,6 @@ pipeline {
         registry_auth = "averbuh/auth"
         registry_main = "averbuh/main"
         registryCredential = 'dockerhub_id'
-        image_auth = ''
-        image_main = ''
       }
     stages {
         stage("Check") {
@@ -20,8 +18,8 @@ pipeline {
         stage("Build Image") {
             steps {
                 script {
-                    image_auth = docker.build("registry_auth:${env.BUILD_ID}")
-                    image_main = docker.build("registry_main:${env.BUILD_ID}")
+                    env.image_auth = docker.build("registry_auth:${env.BUILD_ID}")
+                    env.image_main = docker.build("registry_main:${env.BUILD_ID}")
                   }
               }
             
