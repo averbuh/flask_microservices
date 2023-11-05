@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     options {
       timeout(time: 1, unit: 'SECONDS')
       }
@@ -10,15 +10,17 @@ pipeline {
       }
     stages {
         stage("Check") {
-            agent kubernetes
             steps {
                 echo 'Hello dev pipeline'
               }
           }
         
         stage("Build Image") {
-            agent docker 
+            agent {
+                label 'docker'
+              }
             steps {
+                sh "sudo apt install docker.io"
                 script {
                     env.image_auth = docker.build("registry_auth:${env.BUILD_ID}")
                     env.image_main = docker.build("registry_main:${env.BUILD_ID}")
@@ -27,7 +29,9 @@ pipeline {
             
           }
         stage("Push to registry") {
-            agent kubernetes
+            agent {
+                label 'docker'
+              }
             steps {
                 script {
                     docker.withRegistry('https://hub.docker.com/', registryCredential) {
@@ -39,7 +43,6 @@ pipeline {
           }
           
         stage("Cleaning up") {
-            agent kubernetes
             steps {
                 sh "docker rmi $registry_auth:$BUILD_ID"
                 sh "docker rmi $registry_main:$BUILD_ID"
