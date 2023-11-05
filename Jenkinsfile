@@ -1,5 +1,5 @@
 pipeline {
-    agent kubernetes
+    agent any
     options {
       timeout(time: 1, unit: 'SECONDS')
       }
