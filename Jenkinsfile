@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent kubernetes
     options {
       timeout(time: 1, unit: 'SECONDS')
       }
@@ -18,20 +18,29 @@ pipeline {
           }
         
         stage("Build Image") {
-            agent {
-                  dockerfile {
-                      filename 'Dockerfile'
-                      dir 'app-main'
-                      label registry_main + ":$BUILD_NUMBER"
-                      registryUrl registry_main
-                      registryCredentialsId registryCredential
-                    }
+            steps {
+                script {
+                    image_auth = docker.build("registry_auth:${env.BUILD_ID}")
+                    image_main= docker.build("registry_main:${env.BUILD_ID}")
+                  }
+              }
+            
+          }
+        stage("Push to registry") {
+            steps {
+                script {
+                    docker.withRegistry('https://hub.docker.com/', registryCredential) {
+                      image_auth.push()
+                      image_main.push()
+                      }  
+                  }
               }
           }
+          
         stage("Cleaning up") {
             steps {
-                sh "docker rmi $registry_auth:$BUILD_NUMBER"
-                sh "docker rmi $registry_main:$BUILD_NUMBER"
+                sh "docker rmi $registry_auth:$BUILD_ID"
+                sh "docker rmi $registry_main:$BUILD_ID"
               }
           }
       }
