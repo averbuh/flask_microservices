@@ -20,8 +20,8 @@ pipeline {
         stage("Build Image") {
             steps {
                 script {
-                    image_auth = docker.build("registry_auth:${env.BUILD_ID}")
-                    image_main= docker.build("registry_main:${env.BUILD_ID}")
+                    image_auth = docker.build("registry_auth:${BUILD_NUMBER}")
+                    image_main= docker.build("registry_main:${BUILD_NUMBER}")
                   }
               }
             
@@ -39,8 +39,8 @@ pipeline {
           
         stage("Cleaning up") {
             steps {
-                sh "docker rmi $registry_auth:$BUILD_ID"
-                sh "docker rmi $registry_main:$BUILD_ID"
+                sh "docker rmi $registry_auth:$BUILD_NUMBER"
+                sh "docker rmi $registry_main:$BUILD_NUMBER"
               }
           }
       }
