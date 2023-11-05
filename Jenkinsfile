@@ -17,7 +17,7 @@ pipeline {
         
         stage("Build Image") {
             steps {
-                sh "apt install docker.io"
+                sh "sudo apt install docker.io"
                 script {
                     env.image_auth = docker.build("registry_auth:${env.BUILD_ID}")
                     env.image_main = docker.build("registry_main:${env.BUILD_ID}")
