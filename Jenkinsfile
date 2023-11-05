@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent docker
     options {
       timeout(time: 1, unit: 'SECONDS')
       }
@@ -16,7 +16,6 @@ pipeline {
           }
         
         stage("Build Image") {
-           agent docker
             steps {
                 sh "sudo apt install docker.io"
                 script {
