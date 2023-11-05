@@ -16,6 +16,7 @@ pipeline {
           }
         
         stage("Build Image") {
+           agent docker
             steps {
                 sh "sudo apt install docker.io"
                 script {
