@@ -18,7 +18,7 @@ pipeline {
           }
         
         stage("Build Image") {
-            steps {
+            agent {
                   dockerfile {
                       filename 'Dockerfile'
                       dir 'app-main'
